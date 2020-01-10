@@ -26,7 +26,7 @@ public class game_activity extends AppCompatActivity {
     private SimpleDatabase db;
 
     boolean isResultCorrect;
-    int timelimit = 2;
+    int timelimit = 10;
     private int score = 0;
     private boolean stopTimer = false;
 
