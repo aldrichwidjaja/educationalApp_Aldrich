@@ -46,7 +46,10 @@
         <Button
             android:layout_width="100dp"
             android:layout_height="50dp"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/roundedbtn"
             android:text="Save"
+            android:textColor="#FFFFFF"
             android:id="@+id/save_button"/>
 
 
