@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -26,7 +27,8 @@ public class game_activity extends AppCompatActivity {
     private SimpleDatabase db;
 
     boolean isResultCorrect;
-    int timelimit = 10;
+
+
     private int score = 0;
     private boolean stopTimer = false;
 
@@ -34,6 +36,7 @@ public class game_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_activity);
+
         time_game = (TextView) findViewById(R.id.time_game);
         score_game = (TextView) findViewById(R.id.score_game);
         question_game = (TextView) findViewById(R.id.question_game);
@@ -63,8 +66,13 @@ public class game_activity extends AppCompatActivity {
     private void generate_question() {
         isResultCorrect = true;
         Random random = new Random();
-        int a = random.nextInt(100);
-        int b = random.nextInt(100);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        int a_value = pref.getInt("game_mode", 100);
+        int b_value = pref.getInt("game_mode", 100);
+
+        int a = random.nextInt(a_value);
+        int b = random.nextInt(b_value);
         int result = a + b;
         float f = random.nextFloat();
         if (f > 0.5f) {
@@ -88,12 +96,14 @@ public class game_activity extends AppCompatActivity {
 
     private void timer() {
         final Handler handler = new Handler();
+        final SharedPreferences[] pref = {getApplicationContext().getSharedPreferences("MyPref", 0)};
+        final int[] timelimit = {pref[0].getInt("time_limit", 15)};
         handler.post(new Runnable() {
             @Override
             public void run() {
-                time_game.setText("TIME :" + timelimit);
-                timelimit--;
-                if (timelimit < 0) {
+                time_game.setText("TIME :" + timelimit[0]);
+                timelimit[0]--;
+                if (timelimit[0] < 0) {
                     Intent i = new Intent(game_activity.this, score_activity.class);
                     i.putExtra("score", score);
                     db.addScore(score);
