@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button play;
     Button leaderboard;
+    Button setting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +48,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        setting = (Button) findViewById(R.id.btnMathRate);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                 *  Example of Explicit Intent
+                 *  When you click Play Button on the screen
+                 *  Game Activity will be started
+                 */
+
+                Intent i = new Intent(MainActivity.this,setting_activity.class);
+                startActivity(i);
+            }
+        });
+
     }
 }

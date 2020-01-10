@@ -7,14 +7,12 @@
     tools:context=".MainActivity"
     android:background="@drawable/background_18">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="350dp"
         android:layout_height="350dp"
         android:background="@drawable/aldrich_cool"
         android:layout_marginTop="50dp"
-        android:id="@+id/textView"
-        android:textSize="50sp"
-        android:textColor="#432F21"
+        android:id="@+id/logoView"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
 
