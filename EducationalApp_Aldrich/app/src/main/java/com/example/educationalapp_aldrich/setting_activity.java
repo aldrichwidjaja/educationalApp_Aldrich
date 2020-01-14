@@ -69,19 +69,19 @@ public class setting_activity extends AppCompatActivity {
                     case 0:
                         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                         SharedPreferences.Editor editor = pref.edit();
-                        editor.putInt("time_limit", 15);
+                        editor.putInt("health", 3);
                         editor.apply();
                         break;
                     case 1:
                         SharedPreferences pref2 = getApplicationContext().getSharedPreferences("MyPref", 0);
                         SharedPreferences.Editor editor2 = pref2.edit();
-                        editor2.putInt("time_limit", 30);
+                        editor2.putInt("health", 4);
                         editor2.apply();
                         break;
                     case 2:
                         SharedPreferences pref3 = getApplicationContext().getSharedPreferences("MyPref", 0);
                         SharedPreferences.Editor editor3 = pref3.edit();
-                        editor3.putInt("time_limit", 45);
+                        editor3.putInt("health", 5);
                         editor3.apply();
                         break;
                 }
@@ -100,8 +100,7 @@ public class setting_activity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(setting_activity.this,MainActivity.class);
-                startActivity(i);
+                finish();
             }
         });
 

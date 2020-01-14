@@ -14,27 +14,25 @@ public class MainActivity extends AppCompatActivity {
     Button play;
     Button leaderboard;
     Button setting;
+    MediaPlayer ring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer ring= MediaPlayer.create(getApplicationContext(),R.raw.awesomeness);
+        //START MEDIA PLAYER FOR BACKGROUND MUSIC
+        ring = MediaPlayer.create(getApplicationContext(), R.raw.awesomeness);
         ring.setLooping(true);
         ring.start();
+
 
         play = (Button) findViewById(R.id.play);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 *  Example of Explicit Intent
-                 *  When you click Play Button on the screen
-                 *  Game Activity will be started
-                 */
 
-                Intent i = new Intent(MainActivity.this,game_activity.class);
+                Intent i = new Intent(MainActivity.this, game_activity.class);
                 startActivity(i);
             }
         });
@@ -43,13 +41,8 @@ public class MainActivity extends AppCompatActivity {
         leaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 *  Example of Explicit Intent
-                 *  When you click Play Button on the screen
-                 *  Game Activity will be started
-                 */
 
-                Intent i = new Intent(MainActivity.this,Leaderboards.class);
+                Intent i = new Intent(MainActivity.this, Leaderboards.class);
                 startActivity(i);
             }
         });
@@ -58,16 +51,30 @@ public class MainActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                 *  Example of Explicit Intent
-                 *  When you click Play Button on the screen
-                 *  Game Activity will be started
-                 */
 
-                Intent i = new Intent(MainActivity.this,setting_activity.class);
+                Intent i = new Intent(MainActivity.this, setting_activity.class);
                 startActivity(i);
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (ring != null) {
+            ring.stop();
+            if (isFinishing()) {
+                ring.stop();
+                ring.release();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(ring != null && !ring.isPlaying())
+            ring.start();
+            ring.setLooping(true);
     }
 }

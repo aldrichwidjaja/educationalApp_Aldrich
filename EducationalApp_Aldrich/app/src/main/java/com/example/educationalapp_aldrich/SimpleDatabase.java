@@ -14,6 +14,7 @@ class SimpleDatabase extends SQLiteOpenHelper{
     private static final String DB_NAME = "Leaderboards";
     private static final String TABLE_NAME = "ScoreList";
     private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NAME = "name";
     private static final String COLUMN_SCORE ="score";
 
 
@@ -24,7 +25,7 @@ class SimpleDatabase extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE " +TABLE_NAME
                 +"(" +COLUMN_ID+
-                " INTEGER PRIMARY KEY AUTOINCREMENT, " +COLUMN_SCORE+
+                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_SCORE +
                 " VARCHAR);";
         db.execSQL(sql);
     }
@@ -42,6 +43,7 @@ class SimpleDatabase extends SQLiteOpenHelper{
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COLUMN_SCORE,score);
+        contentValues.put(COLUMN_NAME,"ALDRICH");
 
         db.insert(TABLE_NAME, null, contentValues);
         db.close();

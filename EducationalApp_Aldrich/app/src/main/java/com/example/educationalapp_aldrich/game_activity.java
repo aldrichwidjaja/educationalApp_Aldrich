@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -21,31 +23,46 @@ public class game_activity extends AppCompatActivity {
     TextView result_game;
     TextView question_game;
 
+    LinearLayout answer_game;
+
     ImageButton btnCorrect;
     ImageButton btnIncorrect;
+    Button unhide;
 
     private SimpleDatabase db;
 
     boolean isResultCorrect;
 
 
+
     private int score = 0;
-    private boolean stopTimer = false;
+    private int health = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_activity);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        health = pref.getInt("health", 3);
+
         time_game = (TextView) findViewById(R.id.time_game);
         score_game = (TextView) findViewById(R.id.score_game);
         question_game = (TextView) findViewById(R.id.question_game);
         result_game = (TextView) findViewById(R.id.result_game);
+        answer_game = (LinearLayout) findViewById(R.id.checkon);
+        unhide = (Button) findViewById(R.id.unhide);
+
+        unhide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unhide_now();
+            }
+        });
 
         btnCorrect = (ImageButton) findViewById(R.id.btnCorrect);
         btnIncorrect = (ImageButton) findViewById(R.id.btnIncorrect);
 
-        timer();
         btnCorrect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +77,19 @@ public class game_activity extends AppCompatActivity {
         });
         generate_question();
 
+        answer_game.setVisibility(View.GONE);
+
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        answer_game.setVisibility(View.VISIBLE);
+                        question_game.setVisibility(View.GONE);
+                        result_game.setVisibility(View.GONE);
+                    }
+                }, 5000);
+
         db = new SimpleDatabase(this);
     }
 
@@ -71,6 +101,9 @@ public class game_activity extends AppCompatActivity {
         int a_value = pref.getInt("game_mode", 100);
         int b_value = pref.getInt("game_mode", 100);
 
+        question_game.setVisibility(View.VISIBLE);
+        result_game.setVisibility(View.VISIBLE);
+
         int a = random.nextInt(a_value);
         int b = random.nextInt(b_value);
         int result = a + b;
@@ -81,47 +114,76 @@ public class game_activity extends AppCompatActivity {
         }
         question_game.setText(a + "+" + b);
         result_game.setText("=" + result);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                // Hide your View after 3 seconds
+                question_game.setVisibility(View.GONE);
+                result_game.setVisibility(View.GONE);
+                answer_game.setVisibility(View.VISIBLE);
+            }
+        }, 5000);
+
     }
 
     public void verifyAnswer(boolean answer) {
         if (answer == isResultCorrect) {
-            score += 5;
+            score += 10;
             score_game.setText("SCORE: " + score);
+            question_game.setVisibility(View.VISIBLE);
+            result_game.setVisibility(View.VISIBLE);
+            answer_game.setVisibility(View.GONE);
         } else {
             Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(100);
+            question_game.setVisibility(View.VISIBLE);
+            result_game.setVisibility(View.VISIBLE);
+            answer_game.setVisibility(View.GONE);
+
+            health -= 1;
+            if (health < 1) {
+                Intent i = new Intent(game_activity.this, score_activity.class);
+                i.putExtra("score", score);
+                db.addScore(score);
+                db.close();
+                startActivity(i);
+                finish();
+            } else {
+                time_game.setText("HEALTH: " + health);
+            }
         }
         generate_question();
     }
 
-    private void timer() {
-        final Handler handler = new Handler();
-        final SharedPreferences[] pref = {getApplicationContext().getSharedPreferences("MyPref", 0)};
-        final int[] timelimit = {pref[0].getInt("time_limit", 15)};
-        handler.post(new Runnable() {
+    public void unhide_now() {
+        question_game.setVisibility(View.VISIBLE);
+        result_game.setVisibility(View.VISIBLE);
+        answer_game.setVisibility(View.GONE);
+        score -= 5;
+        score_game.setText("SCORE: " + score);
+        if (score<0) {
+            score = 0;
+            score_game.setText("SCORE: " + score);
+        }
+
+        Handler handler3 = new Handler();
+        handler3.postDelayed(new Runnable() {
+
             @Override
             public void run() {
-                time_game.setText("TIME :" + timelimit[0]);
-                timelimit[0]--;
-                if (timelimit[0] < 0) {
-                    Intent i = new Intent(game_activity.this, score_activity.class);
-                    i.putExtra("score", score);
-                    db.addScore(score);
-                    db.close();
-                    startActivity(i);
-                    stopTimer = true;
-                }
-                if (stopTimer == false) {
-                    handler.postDelayed(this, 1000);
-                }
+                answer_game.setVisibility(View.VISIBLE);
+                question_game.setVisibility(View.GONE);
+                result_game.setVisibility(View.GONE);
             }
-        });
+        }, 3000);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        stopTimer = false;
         finish();
     }
 

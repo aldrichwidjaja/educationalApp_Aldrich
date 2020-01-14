@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Math or Mad"
+        android:text="GAME OVER"
         android:id="@+id/textView"
         android:textSize="50sp"
         android:textColor="#432F21"
@@ -28,5 +28,12 @@
         android:id="@+id/score"
         android:textSize="30sp"
         android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="GO BACK"
+        android:id="@+id/goback"/>
 
 </LinearLayout>
