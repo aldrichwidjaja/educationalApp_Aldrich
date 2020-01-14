@@ -58,7 +58,7 @@ public class setting_activity extends AppCompatActivity {
         });
 
         Spinner dropdown2 = findViewById(R.id.spinner2);
-        String[] items2 = new String[]{"15s", "30s", "45s"};
+        String[] items2 = new String[]{"3", "4", "5"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items2);
         dropdown2.setAdapter(adapter2);
         dropdown2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -91,7 +91,7 @@ public class setting_activity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putInt("time_limit", 15);
+                editor.putInt("health", 3);
                 editor.apply();
             }
         });

@@ -23,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Health: 3"
-            android:id="@+id/time_game"
+            android:id="@+id/health_set"
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="#779ECB"

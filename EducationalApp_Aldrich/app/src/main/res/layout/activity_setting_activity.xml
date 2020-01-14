@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Time Limit"
+            android:text="Set Health"
             android:textSize="30dp"/>
 
         <Spinner
