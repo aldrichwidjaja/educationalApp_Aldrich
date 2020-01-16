@@ -54,7 +54,6 @@ public class game_activity extends AppCompatActivity {
         time_game = (TextView) findViewById(R.id.health_set);
         time_game.setText("HEALTH: " + health);
 
-
         score_game = (TextView) findViewById(R.id.score_game);
         question_game = (TextView) findViewById(R.id.question_game);
         result_game = (TextView) findViewById(R.id.result_game);

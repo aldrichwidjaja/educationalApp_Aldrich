@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         ring.setLooping(true);
         ring.start();
 
-
         play = (Button) findViewById(R.id.play);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
