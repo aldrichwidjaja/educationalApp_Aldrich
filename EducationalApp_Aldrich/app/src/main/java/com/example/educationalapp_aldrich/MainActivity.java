@@ -1,12 +1,15 @@
 package com.example.educationalapp_aldrich;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //START MEDIA PLAYER FOR BACKGROUND MUSIC
         ring = MediaPlayer.create(getApplicationContext(), R.raw.awesomeness);
         ring.setLooping(true);
@@ -58,22 +60,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (ring != null) {
-            ring.stop();
-            if (isFinishing()) {
-                ring.stop();
-                ring.release();
-            }
+    public void onTrimMemory(int level) {
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            ring.pause();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(ring != null && !ring.isPlaying())
             ring.start();
             ring.setLooping(true);
     }
+
+
+    public void setvolume(View view) {
+        if (ring.isPlaying()) {
+            ring.pause();
+            ImageView volumepause = (ImageView) findViewById(R.id.pausesound);
+            volumepause.setImageResource(R.drawable.mutevolume);
+        } else {
+            ring.start();
+            ImageView volumepause = (ImageView) findViewById(R.id.pausesound);
+            volumepause.setImageResource(R.drawable.volume);
+        }
+    }
 }
+

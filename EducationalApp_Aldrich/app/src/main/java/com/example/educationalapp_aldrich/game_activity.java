@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.net.rtp.AudioStream;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -30,10 +33,16 @@ public class game_activity extends AppCompatActivity {
 
     LinearLayout answer_game;
 
+
     ImageButton btnCorrect;
     ImageButton btnIncorrect;
     Button unhide;
     ProgressBar remember;
+
+    SoundPool soundbank;
+    private int sound;
+    private int sound1;
+    private int sound2;
 
     private SimpleDatabase db;
 
@@ -54,6 +63,7 @@ public class game_activity extends AppCompatActivity {
         time_game = (TextView) findViewById(R.id.health_set);
         time_game.setText("HEALTH: " + health);
 
+        //set
         score_game = (TextView) findViewById(R.id.score_game);
         question_game = (TextView) findViewById(R.id.question_game);
         result_game = (TextView) findViewById(R.id.result_game);
@@ -84,6 +94,12 @@ public class game_activity extends AppCompatActivity {
         });
         generate_question();
 
+        soundbank = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
+        sound = soundbank.load(this,R.raw.correct_answer,0);
+        sound1 = soundbank.load(this,R.raw.wrong_answer,0);
+        sound2 = soundbank.load(this,R.raw.game_over,0);
+
+
         answer_game.setVisibility(View.GONE);
 
         Handler handler2 = new Handler();
@@ -95,7 +111,7 @@ public class game_activity extends AppCompatActivity {
                         question_game.setVisibility(View.GONE);
                         result_game.setVisibility(View.GONE);
                     }
-                }, 5000);
+                }, 3500);
 
         db = new SimpleDatabase(this);
     }
@@ -108,7 +124,7 @@ public class game_activity extends AppCompatActivity {
         CountDownTimer mCountDownTimer;
         remember = (ProgressBar) findViewById(R.id.progressbar);
         remember.setProgress(0);
-        mCountDownTimer=new CountDownTimer(5300,1000) {
+        mCountDownTimer=new CountDownTimer(3800,1000) {
             int i=0;
 
             @Override
@@ -140,7 +156,7 @@ public class game_activity extends AppCompatActivity {
         int result = a + b;
         float f = random.nextFloat();
         if (f > 0.5f) {
-            result = random.nextInt(100);
+            result = random.nextInt(pref.getInt("game_mode", 100));
             isResultCorrect = false;
         }
         question_game.setText(a + "+" + b);
@@ -167,24 +183,34 @@ public class game_activity extends AppCompatActivity {
             question_game.setVisibility(View.VISIBLE);
             result_game.setVisibility(View.VISIBLE);
             answer_game.setVisibility(View.GONE);
+            soundbank.play(sound,1,1,0,0,0);
+
+
         } else {
             Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(100);
             question_game.setVisibility(View.VISIBLE);
             result_game.setVisibility(View.VISIBLE);
             answer_game.setVisibility(View.GONE);
+            soundbank.play(sound1,1,1,0,0,0);
+
 
             health -= 1;
             if (health < 1) {
+                soundbank.play(sound,1,1,0,0,0);
                 Intent i = new Intent(game_activity.this, score_activity.class);
                 i.putExtra("score", score);
-                db.addScore(score);
-                db.close();
+                if (score == 0) {
+
+                }else {db.addScore(score);
+                    db.close();}
+
                 startActivity(i);
                 finish();
             } else {
                 time_game.setText("HEALTH: " + health);
             }
+
         }
         generate_question();
     }
