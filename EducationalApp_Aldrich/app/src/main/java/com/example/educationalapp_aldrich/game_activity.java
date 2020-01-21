@@ -111,7 +111,7 @@ public class game_activity extends AppCompatActivity {
                         question_game.setVisibility(View.GONE);
                         result_game.setVisibility(View.GONE);
                     }
-                }, 3500);
+                }, 5000);
 
         db = new SimpleDatabase(this);
     }
@@ -124,7 +124,7 @@ public class game_activity extends AppCompatActivity {
         CountDownTimer mCountDownTimer;
         remember = (ProgressBar) findViewById(R.id.progressbar);
         remember.setProgress(0);
-        mCountDownTimer=new CountDownTimer(3800,1000) {
+        mCountDownTimer=new CountDownTimer(5300,1000) {
             int i=0;
 
             @Override
